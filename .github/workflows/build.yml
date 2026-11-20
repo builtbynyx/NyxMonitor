@@ -1,0 +1,16 @@
+name: build
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore NyxMonitor.sln
+      - run: dotnet build NyxMonitor.sln -c Release --no-restore
+      - run: dotnet test tests/NyxMonitor.Tests -c Release --no-build

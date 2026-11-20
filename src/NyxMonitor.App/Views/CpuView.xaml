@@ -1,0 +1,80 @@
+<UserControl x:Class="NyxMonitor.App.Views.CpuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:NyxMonitor.App.Controls">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,20,28,28">
+            <TextBlock Text="CPU" Style="{StaticResource Text.PageTitle}"/>
+            <TextBlock Text="{Binding Name}" Style="{StaticResource Text.Caption}" Margin="0,2,0,16"/>
+
+            <Border Style="{StaticResource Card}">
+                <WrapPanel>
+                    <controls:StatTile Label="Utilization" Value="{Binding UsageText}"/>
+                    <controls:StatTile Label="Clock speed" Value="{Binding ClockText}"/>
+                    <controls:StatTile Label="Base clock" Value="{Binding BaseClockText}"/>
+                    <controls:StatTile Label="Temperature" Value="{Binding TemperatureText}"/>
+                    <controls:StatTile Label="Cores" Value="{Binding CoresText}"/>
+                    <controls:StatTile Label="Threads" Value="{Binding ThreadsText}"/>
+                    <controls:StatTile Label="L3 cache" Value="{Binding CacheText}"/>
+                    <controls:StatTile Label="Manufacturer" Value="{Binding Manufacturer}"/>
+                </WrapPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Left" Text="Utilization" Style="{StaticResource Text.Section}"/>
+                        <TextBlock Text="{Binding HistoryLabel}" Style="{StaticResource Text.Caption}" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <controls:SparklineGraph Series="{Binding UsageHistory}" Maximum="100" Height="170" Margin="0,12,0,0"
+                                             Stroke="{DynamicResource Brush.Accent}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Left" Text="Temperature" Style="{StaticResource Text.Section}"/>
+                        <TextBlock Text="{Binding HistoryLabel}" Style="{StaticResource Text.Caption}" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <controls:SparklineGraph Series="{Binding TemperatureHistory}" Minimum="0" Maximum="110" Height="110" Margin="0,12,0,0"
+                                             Stroke="{DynamicResource Brush.Warn}"/>
+                    <TextBlock Style="{StaticResource Text.Caption}" TextWrapping="Wrap" Margin="0,10,0,0"
+                               Visibility="{Binding ShowSensorNotice, Converter={StaticResource BoolToVis}}"
+                               Text="No CPU temperature reading. Windows only exposes it to apps with administrator rights — run NyxMonitor as administrator to enable it."/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Text="Logical processors" Style="{StaticResource Text.Section}" Margin="0,0,0,12"/>
+                    <ItemsControl ItemsSource="{Binding CoreUsages}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Grid Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Style="{StaticResource Card}" Grid.Column="0">
+                    <StackPanel>
+                        <TextBlock Text="Temperature sensors" Style="{StaticResource Text.Section}" Margin="0,0,0,12"/>
+                        <ItemsControl ItemsSource="{Binding TemperatureSensors}"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource Card}" Grid.Column="2">
+                    <StackPanel>
+                        <TextBlock Text="Clock sensors" Style="{StaticResource Text.Section}" Margin="0,0,0,12"/>
+                        <ItemsControl ItemsSource="{Binding ClockSensors}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

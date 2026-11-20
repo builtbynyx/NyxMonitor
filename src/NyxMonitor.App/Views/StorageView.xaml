@@ -1,0 +1,35 @@
+<UserControl x:Class="NyxMonitor.App.Views.StorageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:NyxMonitor.App.Controls">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,20,28,28">
+            <TextBlock Text="Storage" Style="{StaticResource Text.PageTitle}"/>
+            <TextBlock Text="{Binding SummaryText}" Style="{StaticResource Text.Caption}" Margin="0,2,0,16"/>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Left" Text="Disk activity" Style="{StaticResource Text.Section}"/>
+                        <TextBlock Text="{Binding HistoryLabel}" Style="{StaticResource Text.Caption}" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <WrapPanel Margin="0,12,0,0">
+                        <controls:StatTile Label="Read (all disks)" Value="{Binding ReadText}" MinWidth="150"/>
+                        <controls:StatTile Label="Write (all disks)" Value="{Binding WriteText}" MinWidth="150"/>
+                    </WrapPanel>
+                    <controls:SparklineGraph Series="{Binding ReadHistory}" SecondarySeries="{Binding WriteHistory}"
+                                             AutoMaximumFloor="1048576" Height="140"
+                                             Stroke="{DynamicResource Brush.Accent}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <Ellipse Width="8" Height="8" Fill="{DynamicResource Brush.Accent}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Read" Style="{StaticResource Text.Caption}" Margin="6,0,18,0"/>
+                        <Ellipse Width="8" Height="8" Fill="#5EE0C8" VerticalAlignment="Center"/>
+                        <TextBlock Text="Write" Style="{StaticResource Text.Caption}" Margin="6,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <ItemsControl ItemsSource="{Binding Drives}"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

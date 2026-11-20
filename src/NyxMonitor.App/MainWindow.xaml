@@ -1,0 +1,82 @@
+<Window x:Class="NyxMonitor.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NyxMonitor" Width="1200" Height="780" MinWidth="920" MinHeight="620"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Brush.Bg}"
+        Foreground="{DynamicResource Brush.Text}"
+        FontFamily="{DynamicResource Font.Ui}" FontSize="13"
+        StateChanged="OnStateChanged">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40" ResizeBorderThickness="6" GlassFrameThickness="0"
+                      CornerRadius="0" UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+
+    <Border x:Name="RootBorder" Background="{DynamicResource Brush.Bg}"
+            BorderBrush="{DynamicResource Brush.Border}" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Custom title bar -->
+            <Grid Grid.Row="0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0">
+                    <Border Width="20" Height="20" CornerRadius="5" Background="{DynamicResource Brush.Accent}">
+                        <TextBlock Text="N" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource Brush.Bg}"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="NyxMonitor" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBlock Text="{Binding VersionText}" Style="{StaticResource Text.Caption}"
+                               VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                            WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Button Style="{StaticResource Style.CaptionButton}" Content="&#xE921;" Click="OnMinimize" ToolTip="Minimize"/>
+                    <Button x:Name="MaximizeButton" Style="{StaticResource Style.CaptionButton}" Content="&#xE922;"
+                            Click="OnMaximizeRestore" ToolTip="Maximize"/>
+                    <Button Style="{StaticResource Style.CloseButton}" Content="&#xE8BB;" Click="OnClose" ToolTip="Close"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="210"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Sidebar -->
+                <Border Grid.Column="0" BorderBrush="{DynamicResource Brush.Border}" BorderThickness="0,0,1,0">
+                    <DockPanel Margin="14,10,14,14">
+                        <StackPanel DockPanel.Dock="Bottom">
+                            <Border Background="{DynamicResource Brush.Surface}" BorderBrush="{DynamicResource Brush.Border}"
+                                    BorderThickness="1" CornerRadius="10" Padding="12">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Style="{StaticResource Style.StatusDot}"/>
+                                        <TextBlock Text="{Binding StatusText}" FontWeight="SemiBold" Margin="8,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding SensorText}" Style="{StaticResource Text.Caption}"
+                                               TextWrapping="Wrap" Margin="0,6,0,0"/>
+                                </StackPanel>
+                            </Border>
+                            <TextBlock Text="{Binding CopyrightText}" Style="{StaticResource Text.Caption}"
+                                       FontSize="11" Margin="4,10,0,0"/>
+                        </StackPanel>
+
+                        <ListBox ItemsSource="{Binding NavigationItems}"
+                                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                 Style="{StaticResource Style.NavList}"
+                                 ItemContainerStyle="{StaticResource Style.NavItem}"/>
+                    </DockPanel>
+                </Border>
+
+                <!-- Page host: the view for the current page view-model comes from DataTemplates.xaml -->
+                <ContentControl Grid.Column="1" Content="{Binding CurrentPage}" Focusable="False"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

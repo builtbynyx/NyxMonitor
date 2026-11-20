@@ -1,0 +1,59 @@
+<UserControl x:Class="NyxMonitor.App.Views.GpuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:NyxMonitor.App.Controls">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,20,28,28">
+            <TextBlock Text="GPU" Style="{StaticResource Text.PageTitle}"/>
+            <TextBlock Text="{Binding Name}" Style="{StaticResource Text.Caption}" Margin="0,2,0,16"/>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12" BorderBrush="{DynamicResource Brush.Warn}"
+                    Visibility="{Binding ShowUnavailableNotice, Converter={StaticResource BoolToVis}}">
+                <TextBlock TextWrapping="Wrap" Style="{StaticResource Text.Caption}"
+                           Text="No GPU sensors could be read. Values below show N/A. Make sure your graphics driver is installed; some sensors also need NyxMonitor to run as administrator."/>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <WrapPanel>
+                    <controls:StatTile Label="Utilization" Value="{Binding UsageText}"/>
+                    <controls:StatTile Label="Dedicated VRAM" Value="{Binding VramText}" MinWidth="170"/>
+                    <controls:StatTile Label="Shared memory" Value="{Binding SharedText}"/>
+                    <controls:StatTile Label="Temperature" Value="{Binding TemperatureText}"/>
+                    <controls:StatTile Label="Core clock" Value="{Binding CoreClockText}"/>
+                    <controls:StatTile Label="Memory clock" Value="{Binding MemoryClockText}"/>
+                    <controls:StatTile Label="Fan" Value="{Binding FanText}"/>
+                </WrapPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Left" Text="Utilization" Style="{StaticResource Text.Section}"/>
+                        <TextBlock Text="{Binding HistoryLabel}" Style="{StaticResource Text.Caption}" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <controls:SparklineGraph Series="{Binding UsageHistory}" Maximum="100" Height="150" Margin="0,12,0,0"
+                                             Stroke="{DynamicResource Brush.Accent}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Right" Text="{Binding VramPercentText}" Style="{StaticResource Text.Value}"/>
+                        <TextBlock Text="VRAM usage" Style="{StaticResource Text.Section}"/>
+                    </DockPanel>
+                    <controls:SparklineGraph Series="{Binding VramHistory}" Maximum="100" Height="110" Margin="0,12,0,0"
+                                             Stroke="{DynamicResource Brush.Accent}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Text="Temperature" Style="{StaticResource Text.Section}"/>
+                    <controls:SparklineGraph Series="{Binding TemperatureHistory}" Minimum="0" Maximum="110" Height="110" Margin="0,12,0,0"
+                                             Stroke="{DynamicResource Brush.Warn}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

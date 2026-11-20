@@ -1,0 +1,52 @@
+<UserControl x:Class="NyxMonitor.App.Views.MemoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:NyxMonitor.App.Controls">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,20,28,28">
+            <TextBlock Text="Memory" Style="{StaticResource Text.PageTitle}"/>
+            <TextBlock Text="{Binding DetailText}" Style="{StaticResource Text.Caption}" Margin="0,2,0,16"/>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <WrapPanel>
+                        <controls:StatTile Label="Utilization" Value="{Binding UsageText}"/>
+                        <controls:StatTile Label="In use" Value="{Binding UsedText}"/>
+                        <controls:StatTile Label="Available" Value="{Binding AvailableText}"/>
+                        <controls:StatTile Label="Usable by Windows" Value="{Binding TotalText}" MinWidth="150"/>
+                        <controls:StatTile Label="Installed" Value="{Binding InstalledText}"/>
+                    </WrapPanel>
+                    <ProgressBar Style="{StaticResource Style.UsageBar}" Value="{Binding UsagePercent, Mode=OneWay}"
+                                 Foreground="{Binding UsagePercent, Converter={StaticResource UsageToBrush}}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Left" Text="Memory usage" Style="{StaticResource Text.Section}"/>
+                        <TextBlock Text="{Binding HistoryLabel}" Style="{StaticResource Text.Caption}" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <controls:SparklineGraph Series="{Binding UsageHistory}" Maximum="100" Height="170" Margin="0,12,0,0"
+                                             Stroke="{DynamicResource Brush.Accent}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,12,0,0">
+                <StackPanel>
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Right" Text="{Binding CommitPercentText}" Style="{StaticResource Text.Value}"/>
+                        <StackPanel>
+                            <TextBlock Text="Commit charge" Style="{StaticResource Text.Section}"/>
+                            <TextBlock Text="{Binding CommitText}" Style="{StaticResource Text.Caption}" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <ProgressBar Style="{StaticResource Style.UsageBar}" Value="{Binding CommitPercent, Mode=OneWay}"
+                                 Foreground="{Binding CommitPercent, Converter={StaticResource UsageToBrush}}" Margin="0,12,0,0"/>
+                    <controls:SparklineGraph Series="{Binding CommitHistory}" Maximum="100" Height="90" Margin="0,14,0,0"
+                                             Stroke="{DynamicResource Brush.Accent}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
